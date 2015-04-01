@@ -1,0 +1,20 @@
+%define lookup-function-name lookupGeneratedInit
+%define class-name FragmentsBindings
+%{
+
+#include <string.h>
+#include <v8.h>
+#include <KrollBindings.h>
+
+#include "com.yallaya.fragments.FragmentFrameProxy.h"
+#include "com.yallaya.fragments.FragmentProxy.h"
+#include "com.yallaya.fragments.FragmentsModule.h"
+
+
+%}
+struct titanium::bindings::BindEntry;
+%%
+com.yallaya.fragments.FragmentFrameProxy, ::com::yallaya::fragments::fragments::FragmentFrameProxy::bindProxy, ::com::yallaya::fragments::fragments::FragmentFrameProxy::dispose
+com.yallaya.fragments.FragmentProxy, ::com::yallaya::fragments::fragments::FragmentProxy::bindProxy, ::com::yallaya::fragments::fragments::FragmentProxy::dispose
+com.yallaya.fragments.FragmentsModule, ::com::yallaya::fragments::FragmentsModule::bindProxy, ::com::yallaya::fragments::FragmentsModule::dispose
+%%

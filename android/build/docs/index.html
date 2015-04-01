@@ -1,0 +1,150 @@
+<h1>Fragments Module</h1>
+<h2>Description</h2>
+<p>This Module add Android Fragments support to Appcelerator Titanium apps
+(http://developer.android.com/guide/components/fragments.html)</p>
+<h2>Requirements</h2>
+<p>Add this to the &lt;android /&gt; node in tiapp.xml: </p>
+<pre><code>&lt;android&gt;
+    &lt;tool-api-level&gt;14&lt;/tool-api-level&gt;
+&lt;/android&gt;
+</code></pre>
+<h2>Accessing the Fragments Module</h2>
+<p>To access this module from JavaScript, you would do the following (recommended):</p>
+<pre><code>var Fragments = require('com.yallaya.fragments');
+</code></pre>
+<p>The "Fragments" variable is now a reference to the Module object.</p>
+<h2>Functions</h2>
+<h3>createFragmentFrame({ . . . })</h3>
+<p>Returns a view that can contain fragments.</p>
+<h4>Arguments</h4>
+<p>parameters[object]: a dictionary object of properties. (same properties and styles as Ti.UI.View)</p>
+<h4>Methods</h4>
+<p>getUid(); - returns the frame's unique ID</p>
+<h3>createFragment({ . . . })</h3>
+<p>Returns a fragment.</p>
+<h4>Arguments</h4>
+<p>container[Ti.UI.VIEW] - the main view of the fragment 
+tag[String] - a tag name for the fragment
+putFragment[Boolean] - Default false; see (http://developer.android.com/reference/android/app/FragmentManager.html#putFragment(android.os.Bundle, java.lang.String, android.app.Fragment)
+addToBackStack[Boolean] - Default false; Add the fragment to the back stack.</p>
+<h4>Methods</h4>
+<p>getAddToBackStack();
+getTag();
+getContainer();</p>
+<p>setAddToBackStack();
+setTag();
+setContainer();</p>
+<h4>Events</h4>
+<p>createView - 
+destroyView - 
+attach - 
+create - 
+saveInstanceState - 
+activityCreated - 
+start - 
+resume - 
+pause - 
+stop - 
+destroy - 
+detach - </p>
+<h3>getFragment(String tag)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentManager.html#getFragment(android.os.Bundle, java.lang.String)</p>
+<h3>findFragmentByTag(String tag)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentManager.html#findFragmentByTag(java.lang.String)</p>
+<h3>putFragment(Fragment fragment)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentManager.html#putFragment(android.os.Bundle, java.lang.String, android.app.Fragment)</p>
+<h3>add(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#add(int, android.app.Fragment, java.lang.String)</p>
+<h3>attach(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#attach(android.app.Fragment)</p>
+<h3>detach(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#detach(android.app.Fragment)</p>
+<h3>remove(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#remove(android.app.Fragment)</p>
+<h3>show(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#show(android.app.Fragment)</p>
+<h3>hide(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#hide(android.app.Fragment)</p>
+<h3>replace(Object arg)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentTransaction.html#replace(int, android.app.Fragment, java.lang.String)</p>
+<h3>popBackStack(String name)</h3>
+<p>see: http://developer.android.com/reference/android/app/FragmentManager.html#popBackStack(java.lang.String, int)</p>
+<h4>Example:</h4>
+<pre><code>var Fragments = require('com.yallaya.fragments');
+
+var win = Ti.UI.createWindow({backgroundColor: 'red'});
+
+// create a frame for the fragments (note: you can have several frames with fragments in one window)
+var frame = Fragments.createFragmentFrame({
+    backgroundColor: 'yellow',
+    width: Ti.UI.FILL,
+    height: Ti.UI.FILL,
+    top: 0,
+    left: 0
+});
+
+// create the first fragment main view
+var mainFragmentView = Ti.UI.createView({backgroundColor: 'blue'});
+
+// create the first fragment
+var fragment = Fragments.createFragment({
+    container: mainFragmentView,
+    tag: 'MyFirstFragment',
+    putFragment: true,
+    addToBackStack: true
+});
+
+// create a button, when clicked we will start a new fragment
+var button = Ti.UI.createButton({title: 'start a new fragment'});
+    button.addEventListener('click', function() {
+
+        // lets create our second fragment
+        var main2FragmentView = Ti.UI.createView({backgroundColor: 'green'});
+            main2FragmentView.add(Ti.UI.createLabel({text: 'I am fragment 2!'}));
+
+        var secondFragment = Fragments.createFragment({
+            container: main2FragmentView,
+            tag: 'MySecondFragment',
+            putFragment: true,
+            addToBackStack: true
+        });
+
+        // since we already added a fragment to the frame we now need to replace it with the new one
+        Fragments.replace({frameId: frame.getUid(), fragment: secondFragment, addToBackStack: true});
+
+    });
+
+mainFragmentView.add(button);
+
+// add the fragment only when window has opened
+win.addEventListener('open', function() {
+    // since it's the first fragment we need to add it, for the rest we will have to replace
+    Fragments.add({frameId: frame.getUid(), fragment: fragment, addToBackStack: true});
+});
+
+win.add(frame);
+win.open();
+</code></pre>
+<h2>Constants</h2>
+<h3>number TRANSIT_ENTER_MASK</h3>
+<p>Fragment transaction animation style</p>
+<h3>number TRANSIT_EXIT_MASK</h3>
+<p>Fragment transaction animation style</p>
+<h3>number TRANSIT_FRAGMENT_CLOSE</h3>
+<p>Fragment transaction animation style</p>
+<h3>number TRANSIT_FRAGMENT_FADE</h3>
+<p>Fragment transaction animation style</p>
+<h3>number TRANSIT_FRAGMENT_OPEN</h3>
+<p>Fragment transaction animation style</p>
+<h3>number TRANSIT_NONE</h3>
+<p>Fragment transaction animation style</p>
+<h3>number TRANSIT_UNSET</h3>
+<p>Fragment transaction animation style</p>
+<h2>Module History</h2>
+<p>View the <a href="changelog.html">change log</a> for this module.</p>
+<h2>Feedback and Support</h2>
+<p>Please direct all questions, feedback, and concerns to <a href="mailto:nimrod@yalla-ya.com?subject=Android%20Fragments%20Module">nimrod@yalla-ya.com</a>.</p>
+<h2>Author</h2>
+<p>Nimrod Kobekowsky | nimrod@yalla-ya.com</p>
+<h2>License</h2>
+<p>Copyright 2015 Nimrod Kobelkowsky, yalla ya!. Please see the LICENSE file included in the distribution for further details.</p>
